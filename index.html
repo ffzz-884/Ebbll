@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <style>
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; padding: 32px; }
+      .container { max-width: 720px; margin: 0 auto; }
+      label { display:block; margin-bottom:8px; font-weight:600 }
+      input[type="text"] { width:80px; padding:8px 10px; font-size:16px; box-sizing:border-box }
+      button { margin-top:12px; padding:8px 12px; font-size:16px }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <input id="code" type="text" />
+
+
+        <button id="go">Download</button>
+  
+    </div>
+
+    <script>
+      const LINK_TEMPLATE = 'https://cbetaonline.cn/getData.php?type=ebooks_export&export_type=mobi&work=';
+
+      const codeInput = document.getElementById('code');
+      const goBtn = document.getElementById('go');
+
+      function normalizeCode(raw) {
+        return String(raw || '').trim().toUpperCase();
+      }
+
+      // Build URL by concatenation instead of replace
+      function buildUrl(code) {
+        return LINK_TEMPLATE + encodeURIComponent(code);
+      }
+
+      function generateUrlOrAlert() {
+        const code = normalizeCode(codeInput.value);
+        if (!code) {
+          alert('Please enter a work code.');
+          return null;
+        }
+        return buildUrl(code);
+      }
+
+      goBtn.addEventListener('click', () => {
+        const url = generateUrlOrAlert();
+        if (url) window.open(url, '_blank');
+      });
+
+      codeInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          goBtn.click();
+        }
+      });
+    </script>
+  </body>
+</html>
