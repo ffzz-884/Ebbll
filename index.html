@@ -29,7 +29,8 @@
       const goBtn = document.getElementById('go');
 
       function normalizeCode(raw) {
-        return String(raw || '').trim().toUpperCase();
+        const str = String(raw || '').trim();
+        return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
       }
 
       // Build URL by concatenation instead of replace
@@ -60,3 +61,4 @@
     </script>
   </body>
 </html>
+
