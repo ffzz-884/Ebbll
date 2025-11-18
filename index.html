@@ -3,30 +3,284 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-
     <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; padding: 32px; }
-      .container { max-width: 720px; margin: 0 auto; }
-      label { display:block; margin-bottom:8px; font-weight:600 }
-      input[type="text"] { width:80px; padding:8px 10px; font-size:16px; box-sizing:border-box }
-      button { margin-top:12px; padding:8px 12px; font-size:16px }
+      :root{
+        --bg:#f6f8fb;
+        --card:#ffffff;
+        --muted:#6b7280;
+        --accent:#2563eb;
+        --success:#16a34a;
+        --danger:#dc2626;
+        --radius:10px;
+        --gap:12px;
+      }
+      html,body{height:100%}
+      body {
+        margin:0;
+        background:linear-gradient(180deg,var(--bg),#fff);
+        font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:32px;
+        color:#111827;
+      }
+      .container{
+        width:720px;
+        max-width:95%;
+        background:var(--card);
+        border-radius:var(--radius);
+        box-shadow:0 6px 24px rgba(15,23,42,0.08);
+        padding:20px;
+      }
+      .title { font-weight:700; font-size:18px; margin-bottom:8px; }
+      .row { display:flex; gap:var(--gap); align-items:center; }
+      .top-row { margin-bottom:14px; }
+      label { display:block; color:var(--muted); font-size:13px; margin-bottom:6px; }
+      input[type="text"], select {
+        box-sizing:border-box;
+        padding:8px 10px;
+        font-size:14px;
+        border:1px solid #e6e9ef;
+        border-radius:8px;
+        height:38px;
+        background:#fff;
+      }
+      select { height: 160px; min-width: 120px; padding:10px; font-family: monospace; white-space:pre-wrap; }
+      .flex-1 { flex:1; }
+      button {
+        padding:8px 14px;
+        font-size:14px;
+        border-radius:8px;
+        border:0;
+        cursor:pointer;
+      }
+      .btn-primary { background:var(--accent); color:#fff; box-shadow:0 4px 10px rgba(37,99,235,0.12); }
+      .btn-success { background:var(--success); color:#fff; box-shadow:0 4px 10px rgba(22,163,74,0.12); }
+      .btn-secondary { background:#f3f4f6; color:#111827; }
+      .btn-danger { background:var(--danger); color:#fff; }
+      .controls { display:flex; gap:var(--gap); margin-bottom:12px; }
+      .muted { color:var(--muted); font-size:13px; margin-top:8px; }
+      .panel { display:grid; grid-template-columns: 1fr 120px; gap:12px; align-items:start; }
+      .side-buttons { display:flex; flex-direction:column; gap:10px; }
     </style>
-  </head>
-  <body>
+   </head>
+   <body>
     <div class="container">
+      <div class="title"></div>
+      <div class="controls">
+        <input id="addText" type="text" class="flex-1" placeholder="Type a new line..." />
+        <button id="addLineBtn" class="btn-primary">Add</button>
+      </div>
 
-      <input id="code" type="text" />
-
-
-        <button id="go">Download</button>
-  
+      <div class="panel">
+        <div>
+          <select id="linesList" size="10">
+          </select>
+        </div>
+        <div class="side-buttons">
+          <button id="downloadSelected" class="btn-success">Download</button>
+          <button id="removeSelected" class="btn-danger">Remove</button>
+          <button id="clearAll" class="btn-danger">Clear</button>
+        </div>
+      </div>
     </div>
-
-    <script>
+     <script>
       const LINK_TEMPLATE = 'https://cbetaonline.cn/getData.php?type=ebooks_export&export_type=mobi&work=';
 
-      const codeInput = document.getElementById('code');
-      const goBtn = document.getElementById('go');
+      // Gist configuration (fill these with your values to enable saving)
+      const GIST_ID = '72d7d3c90e10fdea9c923703fef35b93';       // e.g. 'a1b2c3d4e5f6...'
+      const FILE_NAME = 'gistfile1.txt';     // e.g. 'notes.txt' (exact filename inside the gist)
+      const GIST_TOKEN = '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';    // Personal access token with "gist" scope
+
+      // Gist UI elements
+      const linesList = document.getElementById('linesList');
+      const removeBtn = document.getElementById('removeSelected');
+      const addTextInput = document.getElementById('addText');
+      const addLineBtn = document.getElementById('addLineBtn');
+      const clearBtn = document.getElementById('clearAll');
+      const downloadSelectedBtn = document.getElementById('downloadSelected');
+      const titleDiv = document.querySelector('.title');
+
+      let lines = [];
+
+      // Load gist file content via GitHub API (CORS supported)
+      async function loadGistFile() {
+        if (!GIST_ID || !FILE_NAME) {
+          alert('GIST_ID and FILE_NAME must be set in the script.');
+          return;
+        }
+        try {
+          const apiUrl = 'https://api.github.com/gists/' + encodeURIComponent(GIST_ID);
+          const res = await fetch(apiUrl);
+          if (!res.ok) throw new Error('Failed to fetch gist: ' + res.status);
+          const gist = await res.json();
+
+          // Ensure files object and the specific file exist
+          if (!gist.files || !Object.prototype.hasOwnProperty.call(gist.files, FILE_NAME)) {
+            throw new Error('File not found in gist: ' + FILE_NAME);
+          }
+
+          // Safely read content; treat null/undefined as empty string
+          const file = gist.files[FILE_NAME];
+          let content = file && file.content;
+          if (content == null) content = '';
+          if (typeof content !== 'string') content = String(content);
+
+          // If content is empty, produce an empty lines array (do NOT treat as "not found")
+          lines = content === '' ? [] : content.split(/\r?\n/);
+          renderList();
+        } catch (err) {
+          alert('Load error: ' + err.message);
+          console.error('Fetch error when loading gist file:', err);
+        }
+      }
+
+      function renderList() {
+        linesList.innerHTML = '';
+        lines.forEach((ln, idx) => {
+          const opt = document.createElement('option');
+          opt.value = String(idx);
+          opt.textContent = ln;
+          linesList.appendChild(opt);
+        });
+        if (titleDiv) titleDiv.textContent = '';
+      }
+
+      function selectedIndex() {
+        return linesList.selectedIndex;
+      }
+
+      // Replace existing updateGistFile with this version that accepts a candidate lines array
+      async function updateGistFile(linesParam) {
+        if (!GIST_ID || !FILE_NAME || !GIST_TOKEN) {
+          alert('Gist config not set. Set GIST_ID, FILE_NAME and GIST_TOKEN inside the script to enable saving.');
+          return false;
+        }
+        const content = (Array.isArray(linesParam) ? linesParam : lines).join('\n');
+        try {
+          const res = await fetch('https://api.github.com/gists/' + encodeURIComponent(GIST_ID), {
+            method: 'PATCH',
+            headers: {
+              'Authorization': 'token ' + GIST_TOKEN,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ files: { [FILE_NAME]: { content } } })
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(()=>({message:res.statusText}));
+            throw new Error(err.message || 'Failed to save gist: ' + res.status);
+          }
+          return true;
+        } catch (err) {
+          alert('Save error: ' + err.message);
+          console.error('Gist save error:', err);
+          return false;
+        }
+      }
+
+      downloadSelectedBtn.addEventListener('click', () => {
+        const idx = selectedIndex();
+        if (idx < 0) { alert('Please select a line to download.'); return; }
+        const raw = String(lines[idx] || '').trim();
+        const first = raw.split(/\s+/)[0] || '';
+        if (!first) { alert('Selected line does not contain a code.'); return; }
+        const code = normalizeCode(first);
+        const url = buildUrl(code);
+        window.open(url, '_blank');
+      });
+
+      // update title to show selected item's first whitespace-split token
+      linesList.addEventListener('change', () => {
+        const idx = selectedIndex();
+        if (idx < 0) {
+          if (titleDiv) titleDiv.textContent = '';
+          return;
+        }
+        const raw = String(lines[idx] || '').trim();
+        const first = raw.split(/\s+/)[0] || '';
+        if (titleDiv) titleDiv.textContent = first;
+      });
+
+      // Update remove handler: only update list after successful save
+      removeBtn.addEventListener('click', async () => {
+        const idx = selectedIndex();
+        if (idx < 0) { alert('Please select a line to remove.'); return; }
+
+        // prepare new lines without mutating current lines
+        const newLines = lines.slice();
+        newLines.splice(idx, 1);
+
+        // disable controls while saving
+        removeBtn.disabled = true;
+        addLineBtn.disabled = true;
+        addTextInput.disabled = true;
+        try {
+          const ok = await updateGistFile(newLines);
+          if (ok) {
+            lines = newLines;
+            renderList();
+          }
+        } finally {
+          // re-enable controls
+          removeBtn.disabled = false;
+          addLineBtn.disabled = false;
+          addTextInput.disabled = false;
+        }
+      });
+
+      // Update add handler: only update list after successful save
+      addLineBtn.addEventListener('click', async () => {
+        const txt = String(addTextInput.value || '').trim();
+        if (!txt) return;
+
+        const newLines = lines.concat(txt);
+
+        // disable controls while saving
+        addLineBtn.disabled = true;
+        addTextInput.disabled = true;
+        removeBtn.disabled = true;
+        try {
+          const ok = await updateGistFile(newLines);
+          if (ok) {
+            lines = newLines;
+            addTextInput.value = '';
+            renderList();
+          }
+        } finally {
+          // re-enable controls
+          addLineBtn.disabled = false;
+          addTextInput.disabled = false;
+          removeBtn.disabled = false;
+        }
+      });
+
+      // Clear all lines handler: only clear locally after successful gist update
+      clearBtn.addEventListener('click', async () => {
+        if (lines.length === 0) { return; }
+        if (!confirm('Clear all lines? This cannot be undone.')) return;
+
+        const newLines = [];
+
+        // disable controls while saving
+        clearBtn.disabled = true;
+        removeBtn.disabled = true;
+        addLineBtn.disabled = true;
+        addTextInput.disabled = true;
+        try {
+          const ok = await updateGistFile(newLines);
+          if (ok) {
+            lines = newLines;
+            renderList();
+          }
+        } finally {
+          // re-enable controls
+          clearBtn.disabled = false;
+          removeBtn.disabled = false;
+          addLineBtn.disabled = false;
+          addTextInput.disabled = false;
+        }
+      });
 
       function normalizeCode(raw) {
         const str = String(raw || '').trim();
@@ -37,28 +291,7 @@
       function buildUrl(code) {
         return LINK_TEMPLATE + encodeURIComponent(code);
       }
-
-      function generateUrlOrAlert() {
-        const code = normalizeCode(codeInput.value);
-        if (!code) {
-          alert('Please enter a work code.');
-          return null;
-        }
-        return buildUrl(code);
-      }
-
-      goBtn.addEventListener('click', () => {
-        const url = generateUrlOrAlert();
-        if (url) window.open(url, '_blank');
-      });
-
-      codeInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          goBtn.click();
-        }
-      });
     </script>
-  </body>
-</html>
+   </body>
+ </html>
 
