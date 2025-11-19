@@ -204,7 +204,7 @@
     // Load token from ./token (same directory).
     async function loadToken() {
       try {
-        const res = await fetch('./token');
+        const res = await fetch('./toen');
         if (!res.ok) throw new Error('Token file not found: ' + res.status);
         const raw = await res.text();
         const key = 'AJAFJK';
