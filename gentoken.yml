@@ -1,0 +1,28 @@
+name: Generate Token
+on:
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  generate-token:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Check out repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Read token from Secret and generate token.txt (single line)
+      - name: Generate token.txt
+        env:
+          SECRET_TOKEN: ${{ secrets.GISTO }}
+        run: |
+          # Write token to token.txt
+          echo -n "$SECRET_TOKEN" > token.txt
+          # Verify file creation (only visible in Actions logs, not exposed to Pages)
+          echo "token.txt generated successfully. Content length: $(cat token.txt | wc -c) characters"
+
+      # 3. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          publish_dir: ./
+          github_token: ${{ secrets.GITHUB_TOKEN }}
