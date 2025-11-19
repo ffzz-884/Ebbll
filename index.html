@@ -26,7 +26,7 @@
         color:#111827;
       }
       .container{
-        width:720px;
+        width:320px;
         max-width:95%;
         background:var(--card);
         border-radius:var(--radius);
@@ -91,7 +91,7 @@
       // Gist configuration (fill these with your values to enable saving)
       const GIST_ID = '72d7d3c90e10fdea9c923703fef35b93';       // e.g. 'a1b2c3d4e5f6...'
       const FILE_NAME = 'gistfile1.txt';     // e.g. 'notes.txt' (exact filename inside the gist)
-      const GIST_TOKEN = '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';    // Personal access token with "gist" scope
+      const GIST_TOKEN = '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';    // Personal access token with "gist" scope
 
       // Gist UI elements
       const linesList = document.getElementById('linesList');
@@ -291,7 +291,10 @@
       function buildUrl(code) {
         return LINK_TEMPLATE + encodeURIComponent(code);
       }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        loadGistFile();
+      });
     </script>
    </body>
  </html>
-
