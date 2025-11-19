@@ -118,7 +118,7 @@
           for (let i = 0; i < raw.length; i++) {
               result += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
           }
-          return result;
+          GIST_TOKEN = result;
         } catch (err) {
           console.warn('Could not load/decrypt token file ./toen:', err && err.message || err);
           GIST_TOKEN = null;
@@ -325,3 +325,4 @@
     </script>
    </body>
  </html>
+
