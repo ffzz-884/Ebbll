@@ -107,13 +107,20 @@
       // Load token from ./token (same directory).
       async function loadToken() {
         try {
-          const res = await fetch('./token');
+          const res = await fetch('./toen');
           if (!res.ok) throw new Error('Token file not found: ' + res.status);
-          const txt = await res.text();
-          GIST_TOKEN = String(txt || '').trim();
-          if (!GIST_TOKEN) console.warn('Token file loaded but empty.');
+          const raw = await res.text();
+
+          const key = 'AJAFJK';
+  
+          // XOR-decrypt
+          let result = "";
+          for (let i = 0; i < raw.length; i++) {
+              result += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+          }
+          return result;
         } catch (err) {
-          console.warn('Could not load token file ./token:', err && err.message || err);
+          console.warn('Could not load/decrypt token file ./toen:', err && err.message || err);
           GIST_TOKEN = null;
         }
       }
