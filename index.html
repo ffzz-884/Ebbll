@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>Cbe Down</title>
 <style>
   /* Kindle-optimized styles */
   :root{
@@ -89,9 +88,9 @@
     width:100%;
   }
   
-  select { 
-    height: 250px; 
-    min-width: 100%; 
+  select {
+    flex: 2;
+    height: 250px;
     font-family: Arial, monospace;
     font-size: 20px;
   }
@@ -103,15 +102,19 @@
   .flex-1 { 
     flex:1; 
   }
-  
+
+   .flex-2 { 
+    flex:2; 
+  }
+
   button {
     padding:15px 20px;
     font-size:18px;
     border-radius:5px;
     border:2px solid transparent;
     cursor:pointer;
-    min-height:50px; /* Minimum touch target size */
-    min-width:80px;
+    min-height:50px;
+    min-width:120px;
   }
   
   .btn-primary { 
@@ -137,7 +140,7 @@
   .controls { 
     display:flex; 
     gap:10px; 
-    margin-top:15px; /* Moved to bottom */
+    margin:15px 0;
     flex-wrap:wrap;
   }
   
@@ -149,43 +152,44 @@
   }
   
   .panel { 
-    display:flex; 
-    flex-direction:column;
+    display:flex;
     gap:15px;
   }
   
   .side-buttons { 
+    flex:1;
     display:flex; 
-    gap:10px; 
-    flex-wrap:wrap;
+    gap:10px;
+    flex-direction: column;
   }
   
   .side-buttons button {
-    flex:1;
     min-width:100px;
+  }
+
+  select {
+    width: 100%;
   }
 </style>
 </head>
 <body>
   <div class="container">
+    
+    <div class="controls">
+      <input id="addText" type="text" class="flex-2" placeholder="new line..." />
+      <button id="addLineBtn" class="flex-1">Add</button>
+    </div>
+    
     <div class="title"></div>
-
+    
     <div class="panel">
-      <div>
-        <select id="linesList" size="8">
-        </select>
-      </div>
+      <select id="linesList" size="8">
+      </select>
       <div class="side-buttons">
+        <button id="downloadSelected" class="btn-success">Download</button>
         <button id="removeSelected" class="btn-danger">Remove</button>
         <button id="clearAll" class="btn-danger">Clear</button>
-        <button id="downloadSelected" class="btn-success">Download</button>
       </div>
-    </div>
-
-    <!-- Add controls moved to bottom -->
-    <div class="controls">
-      <input id="addText" type="text" class="flex-1" placeholder="Type a new line..." />
-      <button id="addLineBtn" class="btn-primary">Add</button>
     </div>
     
   </div>
@@ -246,7 +250,6 @@
         if (!gist.files || !Object.prototype.hasOwnProperty.call(gist.files, FILE_NAME)) {
           lines = [];
           renderList();
-          return;
         }
 
         // Safely read content; treat null/undefined as empty string
@@ -433,6 +436,3 @@
 </body>
 
 </html>
-
-
-
