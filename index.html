@@ -167,7 +167,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="title"></div>
+    <div class="title">Cbe Down</div>
 
     <div class="panel">
       <div>
@@ -175,9 +175,9 @@
         </select>
       </div>
       <div class="side-buttons">
-        <button id="downloadSelected" class="btn-success">Download</button>
         <button id="removeSelected" class="btn-danger">Remove</button>
         <button id="clearAll" class="btn-danger">Clear</button>
+        <button id="downloadSelected" class="btn-success">Download</button>
       </div>
     </div>
 
@@ -245,6 +245,7 @@
         if (!gist.files || !Object.prototype.hasOwnProperty.call(gist.files, FILE_NAME)) {
           lines = '';
           renderList();
+          return;
         }
 
         // Safely read content; treat null/undefined as empty string
@@ -431,3 +432,4 @@
 </body>
 
 </html>
+
