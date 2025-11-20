@@ -243,7 +243,8 @@
 
         // Ensure files object and the specific file exist
         if (!gist.files || !Object.prototype.hasOwnProperty.call(gist.files, FILE_NAME)) {
-          throw new Error('File not found in gist: ' + FILE_NAME);
+          lines = '';
+          renderList();
         }
 
         // Safely read content; treat null/undefined as empty string
@@ -428,4 +429,5 @@
     });
   </script>
 </body>
+
 </html>
