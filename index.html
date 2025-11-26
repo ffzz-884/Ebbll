@@ -4,7 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <style>
-  /* Kindle-optimized styles */
   :root{
     --bg:#f0f0f0;
     --card:#ffffff;
@@ -13,28 +12,26 @@
     --success:#5cb85c;
     --danger:#d9534f;
   }
-  
-  * {
-    box-sizing: border-box;
-  }
-  
+
+  * { box-sizing: border-box; }
+
   html,body{
     height:100%;
     font-size:18px;
     -webkit-text-size-adjust:100%;
   }
-  
+
   body {
     margin:0;
     background:var(--bg);
-    font-family:Arial,Helvetica,sans-serif; /* Kindle compatible fonts */
+    font-family:Arial,Helvetica,sans-serif;
     display:flex;
     align-items:center;
     justify-content:center;
     padding:10px;
-    color:#000000;
+    color:#000;
   }
-  
+
   .container{
     width:100%;
     max-width:100%;
@@ -43,153 +40,127 @@
     border-radius:5px;
     padding:15px;
   }
-  
-  .title { 
-    font-weight:bold; 
-    font-size:20px; 
-    margin-bottom:15px; 
+
+  .title {
+    font-weight:bold;
+    font-size:20px;
+    margin-bottom:15px;
     text-align:center;
     padding:10px;
     border-radius:3px;
   }
-  
-  .title:empty::before {
-    content: "\00a0";
-    visibility: hidden;
-  }
+  .title:empty::before { content: "\00a0"; visibility: hidden; }
 
-  .row { 
-    display:flex; 
-    gap:10px; 
-    align-items:center; 
-    margin-bottom:15px;
-  }
-  
-  .top-row { 
-    margin-bottom:15px; 
-  }
-  
-  label { 
-    display:block; 
-    color:var(--muted); 
-    font-size:16px; 
-    margin-bottom:8px; 
-  }
-  
-  input[type="text"], select {
-    box-sizing:border-box;
-    padding:12px;
-    font-size:18px;
-    border:2px solid #999999;
-    border-radius:5px;
-    height:50px; /* Larger touch targets */
-    background:#fff;
-    width:100%;
-  }
-  
-  select {
-    flex: 2;
-    height: 250px;
-    font-family: Arial, monospace;
-    font-size: 20px;
-  }
-
-  option {
-    padding: 6px 2px;
-  }
-  
-  .flex-1 { 
-    flex:1; 
-  }
-
-   .flex-2 { 
-    flex:2; 
-  }
-
-  button {
-    padding:15px 20px;
-    font-size:18px;
-    border-radius:5px;
-    border:2px solid transparent;
-    cursor:pointer;
-    min-height:50px;
-    min-width:120px;
-  }
-  
-  .btn-primary { 
-    background:var(--accent); 
-    color:#fff; 
-  }
-  
-  .btn-success { 
-    background:var(--success); 
-    color:#fff; 
-  }
-  
-  .btn-secondary { 
-    background:#f3f4f6; 
-    color:#000000; 
-  }
-  
-  .btn-danger { 
-    background:var(--danger); 
-    color:#fff; 
-  }
-  
-  .controls { 
-    display:flex; 
-    gap:10px; 
+  .controls {
+    display:flex;
+    gap:10px;
     margin:15px 0;
     flex-wrap:wrap;
   }
-  
-  .muted { 
-    color:var(--muted); 
-    font-size:14px; 
-    margin-top:10px; 
-    text-align:center;
-  }
-  
-  .panel { 
-    display:flex;
-    gap:15px;
-  }
-  
-  .side-buttons { 
-    flex:1;
-    display:flex; 
-    gap:10px;
-    flex-direction: column;
-  }
-  
-  .side-buttons button {
-    min-width:100px;
+
+  input[type="text"]{
+    box-sizing:border-box;
+    padding:12px;
+    font-size:18px;
+    border:2px solid #999;
+    border-radius:5px;
+    height:50px;
+    background:#fff;
+    width:100%;
   }
 
-  select {
-    width: 100%;
+  .flex-1 { flex:1; }
+  .flex-2 { flex:2; }
+
+  button {
+    padding:12px 14px;
+    font-size:16px;
+    border-radius:5px;
+    border:2px solid transparent;
+    cursor:pointer;
+    background:transparent;
   }
-</style>
+
+  .btn-primary { background:var(--accent); color:#fff; }
+  .btn-success { background:var(--success); color:#fff; }
+  .btn-danger  { background:var(--danger);  color:#fff; }
+
+  .lines {
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height: 320px;
+    overflow:auto;
+    width:100%;
+  }
+
+  .line {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:8px;
+    border:1px solid #e0e0e0;
+    border-radius:6px;
+    background:#fff;
+  }
+
+  .line-name {
+    flex:1 1 auto;
+    min-width:0;
+    font-size:18px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .line-actions {
+    display:flex;
+    gap:8px;
+    margin-left:auto;
+    align-items:center;
+  }
+
+  .line button {
+    padding:6px 8px;
+    font-size:14px;
+    min-width:72px;
+    min-height:36px;
+    border:0;
+  }
+
+  .clear-floating {
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    z-index:1000;
+    border-radius:6px;
+    padding:10px 14px;
+  }
+
+  .btn-small {
+    padding:6px 8px;
+    font-size:13px;
+    min-width:72px;
+  }
+
+  .btn-success.btn-small { background:var(--success); color:#fff; border-color:transparent; }
+  .btn-danger.btn-small  { background:var(--danger);  color:#fff; border-color:transparent; }
+  </style>
 </head>
 <body>
   <div class="container">
     
     <form class="controls">
       <input id="addText" type="text" class="flex-2" placeholder="" />
-      <button id="addLineBtn" class="flex-1">Add</button>
+      <button id="addLineBtn" class="btn-primary flex-1">Add</button>
     </form>
     
-    <div class="title"></div>
-    
     <div class="panel">
-      <select id="linesList" size="8">
-      </select>
-      <div class="side-buttons">
-        <button id="downloadSelected" class="">Download</button>
-        <button id="removeSelected" class="">Remove</button>
-        <button id="clearAll" class="">Clear</button>
-      </div>
+      <div id="linesContainer" class="lines" aria-live="polite"></div>
     </div>
+    
+    <!-- floating clear button at bottom-right -->
+    <button id="clearAll" class="btn-danger clear-floating">Clear</button>
     
   </div>
 
@@ -203,32 +174,30 @@
     let GIST_TOKEN = null;
 
     // Gist UI elements
-    const linesList = document.getElementById('linesList');
-    const removeBtn = document.getElementById('removeSelected');
+    const linesContainer = document.getElementById('linesContainer');
     const addTextInput = document.getElementById('addText');
     const addLineBtn = document.getElementById('addLineBtn');
     const clearBtn = document.getElementById('clearAll');
-    const downloadSelectedBtn = document.getElementById('downloadSelected');
     const titleDiv = document.querySelector('.title');
 
     let lines = [];
 
-    // Load token from ./token (same directory).
     async function loadToken() {
       try {
-        const res = await fetch('./toen');
-        if (!res.ok) throw new Error('Token file not found: ' + res.status);
-        const raw = await res.text();
-        const key = 'AJAFJK';
+        const raw = 'LSI1Oz0lFTsgJxd2ewkOYXwBBQJxYz0kew0SCicQcnJwDD0AKBp1ICMCBioFMgkKfDh2IAkkOgoHIw4eGSIqKRIOfy4pIAsScww5FSESA3kYG3wUDiI7YwkwMBg4';
+        const key = 'JKASHG';
 
-        // XOR-decrypt
-        let result = "";
-        for (let i = 0; i < raw.length; i++) {
-            result += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+        const base64Decoded = atob(raw);
+        
+        let result = '';
+        // XOR decryption
+        for (let i = 0; i < base64Decoded.length; i++) {
+            result += String.fromCharCode(base64Decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
         }
+
         GIST_TOKEN = result;
       } catch (err) {
-        console.warn('Could not load/decrypt token file ./token:', err && err.message || err);
+        console.warn('Could not decrypt token. ', err && err.message || err);
         GIST_TOKEN = null;
       }
     }
@@ -266,20 +235,86 @@
       }
     }
 
+    // Render lines into the new container. Each line has Download and Remove.
     function renderList() {
-      linesList.innerHTML = '';
+      linesContainer.innerHTML = '';
       lines.forEach((ln, idx) => {
-        const opt = document.createElement('option');
-        opt.value = String(idx);
-        opt.textContent = ln;
-        linesList.appendChild(opt);
+        const row = document.createElement('div');
+        row.className = 'line';
+        // name
+        const name = document.createElement('div');
+        name.className = 'line-name';
+        name.textContent = ln;
+
+        // actions wrapper (right-aligned)
+        const actions = document.createElement('div');
+        actions.className = 'line-actions';
+        
+        // download button (green)
+        const dl = document.createElement('button');
+        dl.type = 'button';
+        dl.className = 'btn-success btn-small';
+        dl.textContent = 'Download';
+        dl.dataset.index = String(idx);
+        
+        // remove button (red)
+        const rm = document.createElement('button');
+        rm.type = 'button';
+        rm.className = 'btn-danger btn-small';
+        rm.textContent = 'Remove';
+        rm.dataset.index = String(idx);
+
+        actions.appendChild(dl);
+        actions.appendChild(rm);
+
+        row.appendChild(name);
+        row.appendChild(actions);
+
+        linesContainer.appendChild(row);
       });
       if (titleDiv) titleDiv.textContent = '';
     }
 
-    function selectedIndex() {
-      return linesList.selectedIndex;
-    }
+    // Delegated click handling for per-line download/remove
+    linesContainer.addEventListener('click', async (e) => {
+      const btn = e.target;
+      if (!btn || !btn.dataset || typeof btn.dataset.index === 'undefined') return;
+      const idx = Number(btn.dataset.index);
+      if (Number.isNaN(idx) || idx < 0 || idx >= lines.length) return;
+
+      if (btn.textContent && btn.textContent.toLowerCase().includes('download')) {
+        const raw = String(lines[idx] || '').trim();
+        const first = raw.split(/\s+/)[0] || '';
+        if (!first) { alert('Selected line does not contain a code.'); return; }
+        const code = normalizeCode(first);
+        const url = buildUrl(code);
+        window.open(url, '_blank');
+        return;
+      }
+
+      if (btn.textContent && btn.textContent.toLowerCase().includes('remove')) {
+        // remove this line (safe save)
+        const newLines = lines.slice();
+        newLines.splice(idx, 1);
+
+        // disable UI while saving
+        btn.disabled = true;
+        addLineBtn.disabled = true;
+        addTextInput.disabled = true;
+        try {
+          const ok = await updateGistFile(newLines);
+          if (ok) {
+            lines = newLines;
+            renderList();
+          }
+        } finally {
+          btn.disabled = false;
+          addLineBtn.disabled = false;
+          addTextInput.disabled = false;
+        }
+        return;
+      }
+    });
 
     // Replace existing updateGistFile with this version that accepts a candidate lines array
     async function updateGistFile(linesParam) {
@@ -313,67 +348,15 @@
       }
     }
 
-    downloadSelectedBtn.addEventListener('click', () => {
-      const idx = selectedIndex();
-      if (idx < 0) { alert('Please select a line to download.'); return; }
-      const raw = String(lines[idx] || '').trim();
-      const first = raw.split(/\s+/)[0] || '';
-      if (!first) { alert('Selected line does not contain a code.'); return; }
-      const code = normalizeCode(first);
-      const url = buildUrl(code);
-      window.open(url, '_blank');
-    });
-
-    // update title to show selected item's first whitespace-split token
-    linesList.addEventListener('change', () => {
-      const idx = selectedIndex();
-      if (idx < 0) {
-        if (titleDiv) titleDiv.textContent = '';
-        return;
-      }
-      const raw = String(lines[idx] || '').trim();
-      const first = raw.split(/\s+/)[0] || '';
-      if (titleDiv) titleDiv.textContent = first;
-    });
-
-    // Update remove handler: only update list after successful save
-    removeBtn.addEventListener('click', async () => {
-      const idx = selectedIndex();
-      if (idx < 0) { alert('Please select a line to remove.'); return; }
-
-      // prepare new lines without mutating current lines
-      const newLines = lines.slice();
-      newLines.splice(idx, 1);
-
-      // disable controls while saving
-      removeBtn.disabled = true;
-      addLineBtn.disabled = true;
-      addTextInput.disabled = true;
-      try {
-        const ok = await updateGistFile(newLines);
-        if (ok) {
-          lines = newLines;
-          renderList();
-        }
-      } finally {
-        // re-enable controls
-        removeBtn.disabled = false;
-        addLineBtn.disabled = false;
-        addTextInput.disabled = false;
-      }
-    });
-
-    // Update add handler: only update list after successful save
-    addLineBtn.addEventListener('click', async () => {
+    addLineBtn.addEventListener('click', async (ev) => {
+      ev.preventDefault();
       const txt = String(addTextInput.value || '').trim();
       if (!txt) return;
 
       const newLines = lines.concat(txt);
 
-      // disable controls while saving
       addLineBtn.disabled = true;
       addTextInput.disabled = true;
-      removeBtn.disabled = true;
       try {
         const ok = await updateGistFile(newLines);
         if (ok) {
@@ -382,23 +365,18 @@
           renderList();
         }
       } finally {
-        // re-enable controls
         addLineBtn.disabled = false;
         addTextInput.disabled = false;
-        removeBtn.disabled = false;
       }
     });
 
-    // Clear all lines handler: only clear locally after successful gist update
     clearBtn.addEventListener('click', async () => {
       if (lines.length === 0) { return; }
       if (!confirm('Clear all lines? This cannot be undone.')) return;
 
       const newLines = [];
 
-      // disable controls while saving
       clearBtn.disabled = true;
-      removeBtn.disabled = true;
       addLineBtn.disabled = true;
       addTextInput.disabled = true;
       try {
@@ -408,9 +386,7 @@
           renderList();
         }
       } finally {
-        // re-enable controls
         clearBtn.disabled = false;
-        removeBtn.disabled = false;
         addLineBtn.disabled = false;
         addTextInput.disabled = false;
       }
@@ -421,7 +397,6 @@
       return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
 
-    // Build URL by concatenation instead of replace
     function buildUrl(code) {
       return LINK_TEMPLATE + encodeURIComponent(code);
     }
@@ -435,5 +410,3 @@
 </body>
 
 </html>
-
-
