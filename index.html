@@ -33,12 +33,12 @@
   }
 
   .container{
-    width:100%;
-    max-width:100%;
+    width: 450px;
+    margin: 0 auto;
     background:var(--card);
-    border:2px solid #cccccc;
-    border-radius:5px;
-    padding:15px;
+    border:1px solid #cccccc;
+    border-radius:6px;
+    padding:12px;
   }
 
   .title {
@@ -53,30 +53,30 @@
 
   .controls {
     display:flex;
-    gap:10px;
+    gap:8px;
     margin:15px 0;
     flex-wrap:wrap;
   }
 
   input[type="text"]{
     box-sizing:border-box;
-    padding:12px;
-    font-size:18px;
-    border:2px solid #999;
+    padding:8px 10px;
+    font-size:16px;
+    border:1px solid #999;
     border-radius:5px;
-    height:50px;
+    height:36px;
     background:#fff;
     width:100%;
   }
 
   .flex-1 { flex:1; }
-  .flex-2 { flex:2; }
+  .flex-3 { flex:3; }
 
   button {
-    padding:12px 14px;
-    font-size:16px;
+    padding:8px 10px;
+    font-size:14px;
     border-radius:5px;
-    border:2px solid transparent;
+    border:1px solid transparent;
     cursor:pointer;
     background:transparent;
   }
@@ -124,7 +124,7 @@
     padding:6px 8px;
     font-size:14px;
     min-width:72px;
-    min-height:36px;
+    min-height:32px;
     border:0;
   }
 
@@ -138,9 +138,9 @@
   }
 
   .btn-small {
-    padding:6px 8px;
+    padding:5px 8px;
     font-size:13px;
-    min-width:72px;
+    min-width:64px;
   }
 
   .btn-success.btn-small { background:var(--success); color:#fff; border-color:transparent; }
@@ -151,7 +151,7 @@
   <div class="container">
     
     <form class="controls">
-      <input id="addText" type="text" class="flex-2" placeholder="" />
+      <input id="addText" type="text" class="flex-3" placeholder="" />
       <button id="addLineBtn" class="btn-primary flex-1">Add</button>
     </form>
     
